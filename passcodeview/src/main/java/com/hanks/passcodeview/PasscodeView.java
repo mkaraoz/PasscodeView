@@ -38,7 +38,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
 {
     private boolean mIsSecondInput;
     private String mLocalPasscode = "";
-    private String currentHash = "";
+    private String mCurrentHash = "";
     private PasscodeViewListener mPasscodeListener;
     private ViewGroup mLayoutPasscode;
     private TextView mTvInpuTip;
@@ -216,8 +216,8 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
      */
     public PasscodeView setCurrentHash(String currentHash)
     {
-        this.currentHash = currentHash;
-        this.mPasscodeType = TYPE_CHECK_PASSCODE;
+        mCurrentHash = currentHash;
+        mPasscodeType = TYPE_CHECK_PASSCODE;
         return this;
     }
 
@@ -228,7 +228,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
 
     public PasscodeView setListener(PasscodeViewListener listener)
     {
-        this.mPasscodeListener = mPasscodeListener;
+        this.mPasscodeListener = listener;
         return this;
     }
 
@@ -374,7 +374,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
 
     private void checkThePasscode()
     {
-        if (TextUtils.isEmpty(mLocalPasscode))
+        if (TextUtils.isEmpty(mCurrentHash))
         {
             throw new RuntimeException("must set currentHash when type is TYPE_CHECK_PASSCODE");
         }
@@ -401,7 +401,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
 
                 if (mIsPasscodeCorrect)
                 {
-                    runOkAnimation(currentHash);
+                    runOkAnimation(mCurrentHash);
                 }
                 else
                 {
@@ -483,7 +483,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
         }
     }
 
-    private void checkHashAsync(final String psd)
+    private void checkHashAsync(final String passcode)
     {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new Runnable()
@@ -493,7 +493,7 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener
             {
                 try
                 {
-                    mIsPasscodeCorrect = PasswordStorage.verifyPassword(psd, currentHash);
+                    mIsPasscodeCorrect = PasswordStorage.verifyPassword(passcode, mCurrentHash);
                 }
                 catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException e)
                 {

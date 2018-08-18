@@ -23,7 +23,7 @@ dependencies {
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#222222"
-    app:firstInputTip="Enter a passcode of 5 digits "
+    app:mFirstInputTip="Enter a passcode of 5 digits "
     app:correctStateColor="#71bb4d"
     app:wrongStateColor="#ea2b46"
     app:normalStateColor="#ffffff"
